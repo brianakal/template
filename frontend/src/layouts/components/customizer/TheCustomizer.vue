@@ -173,37 +173,48 @@ export default {
         },
         navbarTypeLocal: {
             get() { return this.navbarType; },
-            set(val) { this.$emit('updateNavbar', val) }
+            set(val) { 
+                this.$emit('updateNavbar', val) 
+                localStorage.setItem('navbarTypeLocal', val)
+            }
         },
         navbarColorLocal: {
             get() { return this.navbarColor; },
             set(val) { 
                 this.$emit('updateNavbarColor', val) 
-                localStorage.setItem('navbarColorLocal', val)    
+                localStorage.setItem('navbarColorLocal', val)
             }
         },
         footerTypeLocal: {
             get() { return this.footerType; },
-            set(val) { this.$emit('updateFooter', val) }
+            set(val) { this.$emit('updateFooter', val) 
+            localStorage.setItem('footerTypeLocal', val)        
+        }
         },
         routerTransitionLocal: {
             get() { return this.routerTransition; },
-            set(val) { this.$emit('updateRouterTransition', val) }
+            set(val) { this.$emit('updateRouterTransition', val) 
+            localStorage.setItem('routerTransitionLocal', val)        
+        }
         },
         primaryColor: {
             get() { return this.$store.state.themePrimaryColor },
-            set(val) { this.$store.commit('UPDATE_PRIMARY_COLOR', val) }
+            set(val) { this.$store.commit('UPDATE_PRIMARY_COLOR', val) 
+            localStorage.setItem('primaryColor', val)        
+        }
         },
         hideScrollToTopLocal: {
             get() { return this.hideScrollToTop },
-            set(val) { this.$emit('toggleHideScrollToTop', val) }
+            set(val) { this.$emit('toggleHideScrollToTop', val) 
+            localStorage.setItem('hideScrollToTopLocal', val)        
+        }
         },
     },
     methods: {
         updatePrimaryColor(color) {
             this.primaryColor = color;
             this.$vs.theme({ primary: color });
-            localStorage.setItem('primaryColor',color)
+            // localStorage.setItem('primaryColor',color)
         }
     },
     components: {
