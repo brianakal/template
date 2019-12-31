@@ -17,6 +17,14 @@
             <div class="flex w-full justify-between items-start">
                 <div class="mail__details">
                     <h5 class="mb-1" :class="{'font-semibold': mail.isread}">{{ mail.from }}</h5>
+                    
+                    <div v-if="mailFilter === 'inbox'">
+                        id_inbox = {{ mail.id_inbox }}
+                    </div>
+                    <div v-if="mailFilter === 'sent'">
+                        id_sent = {{ mail.id_sent }}
+                    </div>
+                    
                     <span v-if="mail.subject">{{ mail.subject }}</span>
                     <span v-else>(no subject)</span>
                 </div>
@@ -81,6 +89,11 @@ export default{
         }
     },
     computed: {
+        //ditambah Brian mailFilter Start
+        mailFilter() {
+            return this.$store.state.surat.mail_filter;
+        },
+        //ditambah Brian mailFilter End
         labelColor() {
             return (label) => {
                 const tags = this.$store.state.surat.mailTags;

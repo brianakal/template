@@ -75,7 +75,7 @@ const router = new Router({
                 // },
                 {
                     path: '/refactory/personil/',
-                    name: 'createNotification',
+                    name: 'personilList',
                     component: () => import('./views/refactory/personil/PersonilList.vue'),
                     meta: {
                         breadcrumb: [
@@ -120,7 +120,7 @@ const router = new Router({
                 },
                 {
                     path: '/refactory/email',
-                    name: 'email',
+                    name: 'emailInbox',
                     component: () => import('./views/refactory/email/Email.vue'),
                     meta: {
                         rule: 'admin'

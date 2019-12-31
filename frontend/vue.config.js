@@ -11,3 +11,9 @@
 module.exports = {
   publicPath: '/'
 }
+/* module.exports = {
+  baseUrl: '',
+  devServer: {
+    host: 'localhost'
+  }
+} */

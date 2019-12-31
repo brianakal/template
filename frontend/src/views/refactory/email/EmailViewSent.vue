@@ -63,8 +63,8 @@
 
                             <feather-icon icon="MailIcon" svg-classes="h-6 w-6" class="cursor-pointer ml-4" @click="$emit('markUnread')"></feather-icon>
                             <feather-icon icon="TrashIcon" svg-classes="h-6 w-6" class="cursor-pointer ml-4" @click="$emit('removeMail')"></feather-icon>
-                            <feather-icon icon="ChevronsLeftIcon" svg-classes="h-6 w-6" class="cursor-pointer ml-4 hidden sm:inline-flex" @click="$emit('previousMail')"></feather-icon>
-                            <feather-icon icon="ChevronsRightIcon" svg-classes="h-6 w-6" class="cursor-pointer ml-4 hidden sm:inline-flex" @click="$emit('nextMail')"></feather-icon>
+                            <feather-icon icon="ChevronsLeftIcon" svg-classes="h-6 w-6" class="cursor-pointer ml-4 hidden sm:inline-flex" @click="$emit('previousMailSent')"></feather-icon>
+                            <feather-icon icon="ChevronsRightIcon" svg-classes="h-6 w-6" class="cursor-pointer ml-4 hidden sm:inline-flex" @click="$emit('nextMailSent')"></feather-icon>
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                                 <div class="vx-row">
                                     <div class="vx-col w-full border-b border-l-0 border-r-0 border-t-0 border-grey-light border-solid mb-6 flex">
                                         <feather-icon icon="PaperclipIcon"></feather-icon>&nbsp;
-                                        <span class="block py-4"><vs-chip color="primary" class="px-4 py-2 mr-3">{{ currentMail.no_surat }}</vs-chip></span>
+                                        <span class="block py-4"><vs-chip color="primary" class="px-4 py-2 mr-3">{{ currentMail.attachment }}</vs-chip></span>
                                     </div>
                                     <!-- 
                                     <div class="flex">
@@ -168,14 +168,6 @@
                                     <div class="vx-col w-full flex justify-between">
                                         <span class="text-lg">Click here to <span class="text-primary font-semibold cursor-pointer">Reply</span> or <span class="text-primary font-semibold cursor-pointer">Forward</span></span>
                                         <feather-icon icon="PaperclipIcon"></feather-icon>
-                                        <div v-if="this.$store.state.surat.mail_filter === 'inbox'">
-                                        <ul class="centerx">
-                                            <li v-for="(region, index) in regions" :key="index">
-                                                <vs-checkbox v-model="form.regions" :vs-value="region" >{{ region.name }}</vs-checkbox>
-                                            </li>
-                                        </ul>
-                                        <div class="modelx">{{ form.regions }}</div>
-                                        </div>
                                     </div>
                                 </div>
                             </vx-card>
@@ -206,22 +198,7 @@ export default{
             required: true
         },
     },
-    data: () => ({
-        form: {
-            regions: []
-        },
-        regions: [
-            { id: 1, name: 'Queensland' },
-            { id: 2, name: 'South Australia' },
-            { id: 3, name: 'New South Wales' },
-        ],
-        showThread: false,
-        settings: {
-            maxScrollbarLength: 60,
-            wheelSpeed: 0.30,
-        }
-    }),
-    /* 
+    
     data() {
         return {
             showThread: false,
@@ -231,7 +208,7 @@ export default{
             },
         }
     }, 
-    */
+   
     watch: {
         isSidebarActive(value) {
             if(!value) {
@@ -244,18 +221,11 @@ export default{
     },
     computed: {
         currentMail() {
-            if (this.mailFilter === 'inbox') {
-                return this.$store.getters['surat/getMail'](this.openMailId)
-            } else if (this.mailFilter === 'sent') {
-                return this.$store.getters['surat/getMailSent'](this.openMailId)
-            }    
-        },
-        mailFilter() {
-            return this.$store.state.surat.mail_filter;
+            return this.$store.getters['surat/getMailSent'](this.openMailId)
         },
         labelColor() {
             return (label) => {
-                const tags = this.$store.state.surat.mailTags;
+                const tags = this.$store.state.email.mailTags;
                 return tags.find((tag) => {
                     return tag.value == label
                 }).color

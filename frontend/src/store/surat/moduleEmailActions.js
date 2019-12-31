@@ -14,7 +14,6 @@ export default {
         commit('SET_MAIL_SEARCH_QUERY', query)
     },
     updateMailFilter({ commit }, filterName){
-        // alert(filterName)
         commit('UPDATE_MAIL_FILTER', filterName)
     },
     toggleIsMailStarred({ commit }, payload) {
@@ -41,14 +40,14 @@ export default {
         */
         
         const response = await axios.get('/emails/getInboxList')
-        const maillss = response.data.map(variabelMail => {
+        const mailInbox = response.data.map(variabelMail => {
             return {
                 ...variabelMail,
                 mailType : 'inbox'
             }
         })
-        console.log(maillss)
-        commit('SET_MAILBOX', maillss)
+        // console.log(mailInbox)
+        commit('SET_MAILBOX', mailInbox)
         /* 
         atau
         
@@ -63,7 +62,15 @@ export default {
     },
     async getSents({ commit }) {
         const response = await axios.get('/emails/getSentList')
-        commit('SET_MAILBOX', response.data)
+        // commit('SET_MAILBOX', response.data)
+
+        const sentItem = response.data
+        for (let i = 0; i <= sentItem.length-1; i++) {
+            sentItem[i].mailType='sent'
+        }
+        // console.log(sentItem)
+        commit('SET_MAILBOX', sentItem)
+
     },
     /* 
     async getSearchInbox({ commit }, payload) {

@@ -68,7 +68,7 @@
                         <vs-divider></vs-divider>
 
                         <!-- NAVBAR TYPE -->
-                        <div class="mt-4">
+                        <!-- <div class="mt-4">
                             <h5 class="mb-2">Navbar Type</h5>
                             <div>
                                 <vs-radio class="mr-4" v-model="navbarTypeLocal" vs-value="hidden">Hidden</vs-radio>
@@ -77,10 +77,10 @@
                                 <vs-radio v-model="navbarTypeLocal" vs-value="floating">Floating</vs-radio>
                             </div>
                         </div>
-                        <vs-divider></vs-divider>
+                        <vs-divider></vs-divider> -->
 
                         <!-- FOOTER TYPE -->
-                        <div class="mt-4">
+                        <!-- <div class="mt-4">
                             <h5 class="mb-2">Footer Type</h5>
                             <div>
                                 <vs-radio class="mr-4" v-model="footerTypeLocal" vs-value="hidden">Hidden</vs-radio>
@@ -88,7 +88,7 @@
                                 <vs-radio v-model="footerTypeLocal" vs-value="sticky">Sticky</vs-radio>
                             </div>
                         </div>
-                        <vs-divider></vs-divider>
+                        <vs-divider></vs-divider> -->
 
                         <!-- SHOW SCROLL TO TOP -->
                         <div class="mt-4 flex justify-between">
@@ -164,18 +164,22 @@ export default {
                 return this.$store.state.theme;
             },
             set(val) {
-                this.$store.dispatch('updateTheme', val);
+                this.$store.dispatch('updateTheme', val);                
+                localStorage.setItem('theme', val)
             }
         },
         reduced_sidebar: {
             get() { return this.$store.state.reduceButton },
-            set(val) { this.$store.commit('TOGGLE_REDUCE_BUTTON', val) }
+            set(val) { 
+                this.$store.commit('TOGGLE_REDUCE_BUTTON', val) 
+                localStorage.setItem('reduced_sidebar', val)
+            }
         },
         navbarTypeLocal: {
             get() { return this.navbarType; },
             set(val) { 
                 this.$emit('updateNavbar', val) 
-                localStorage.setItem('navbarTypeLocal', val)
+                // localStorage.setItem('navbarTypeLocal', val)
             }
         },
         navbarColorLocal: {
@@ -187,27 +191,31 @@ export default {
         },
         footerTypeLocal: {
             get() { return this.footerType; },
-            set(val) { this.$emit('updateFooter', val) 
-            localStorage.setItem('footerTypeLocal', val)        
-        }
+            set(val) { 
+                this.$emit('updateFooter', val) 
+                // localStorage.setItem('footerTypeLocal', val)        
+            }
         },
         routerTransitionLocal: {
             get() { return this.routerTransition; },
-            set(val) { this.$emit('updateRouterTransition', val) 
-            localStorage.setItem('routerTransitionLocal', val)        
-        }
+            set(val) { 
+                this.$emit('updateRouterTransition', val) 
+                localStorage.setItem('routerTransitionLocal', val)        
+            }
         },
         primaryColor: {
             get() { return this.$store.state.themePrimaryColor },
-            set(val) { this.$store.commit('UPDATE_PRIMARY_COLOR', val) 
-            localStorage.setItem('primaryColor', val)        
-        }
+            set(val) { 
+                this.$store.commit('UPDATE_PRIMARY_COLOR', val) 
+                localStorage.setItem('primaryColor', val)        
+            }
         },
         hideScrollToTopLocal: {
             get() { return this.hideScrollToTop },
-            set(val) { this.$emit('toggleHideScrollToTop', val) 
-            localStorage.setItem('hideScrollToTopLocal', val)        
-        }
+            set(val) { 
+                this.$emit('toggleHideScrollToTop', val) 
+                localStorage.setItem('hideScrollToTopLocal', val)        
+            }
         },
     },
     methods: {

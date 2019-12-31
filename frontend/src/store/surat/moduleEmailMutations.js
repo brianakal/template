@@ -13,7 +13,9 @@ export default {
         state.mailSearchQuery = query;
     },
     UPDATE_MAIL_FILTER(state, filterName) {
+        // console.log(filterName)
         state.mail_filter = filterName
+        // console.log(state.mail_filter)
     },
     TOGGLE_IS_MAIL_STARRED(state, payload) {
         state.mails.forEach((mail) => {

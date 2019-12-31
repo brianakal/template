@@ -1,10 +1,10 @@
-<!-- =========================================================================================
+< !-- =========================================================================================
     File Name: EmailSidebar.vue
-    Description: Email Application Sidebar(Filter) (Inbox)
-    ----------------------------------------------------------------------------------------
+Description: Email Application Sidebar(Filter)(Inbox)
+----------------------------------------------------------------------------------------
     Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
+Author: Pixinvent
+Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== -->
 
 
@@ -51,6 +51,7 @@
                     <feather-icon icon="SendIcon" :svgClasses="[{'text-primary stroke-current': mailFilter == 'sent'}, 'h-6 w-6']"></feather-icon>
                     <span class="text-lg ml-3">Sent</span>
                 </div>
+                <!--
                 <div class="flex justify-between items-center mt-4 cursor-pointer" :class="{'text-primary': mailFilter == 'draft'}" @click="updateFilter('draft')">
                     <div class="flex items-center mb-2">
                         <feather-icon icon="Edit2Icon" :svgClasses="[{'text-primary stroke-current': mailFilter == 'draft'}, 'h-6 w-6']"></feather-icon>
@@ -73,6 +74,7 @@
                     <feather-icon icon="TrashIcon" :svgClasses="[{'text-primary stroke-current': mailFilter == 'trash'}, 'h-6 w-6']"></feather-icon>
                     <span class="text-lg ml-3">Trash</span>
                 </div>
+                 -->
             </div>
             <vs-divider></vs-divider>
             <div class="email__labels px-6 py-4">
@@ -144,19 +146,17 @@ export default{
     },
     methods: {
         updateFilter(filterName) {
-            // alert(filterName);
-            this.$store.dispatch('surat/updateMailFilter', filterName);
+            this.$store.dispatch('surat/updateMailFilter', filterName)
+            this.$emit('closeSidebar', false)
+            // console.log(this.$store.state)
             
-            if (filterName === 'sent'){
+            if (this.$store.state.surat.mail_filter === 'sent'){
                 // this.mailFilter = 'sent'
-                this.$store.dispatch('surat/getSents', filterName);
-            } else if (filterName === 'inbox') {
+                this.$store.dispatch('surat/getSents');
+            } else if (this.$store.state.surat.mail_filter === 'inbox') {
                 // this.mailFilter = 'inbox'
-                this.$store.dispatch('surat/getInboxs', filterName);
+                this.$store.dispatch('surat/getInboxs');
             }
-            
-            this.$emit('closeSidebar', false);
-            // this.$emit('mawaFilterEuy', "this.mailFilter")
         },
         // compose mail methods
         clearFields() {
@@ -168,7 +168,7 @@ export default{
             this.mailMessage = '';
         },
         // sendMail() {},
-        
+
         async sendEmail() {
             const data = {
                 private: false,
@@ -229,6 +229,6 @@ export default{
     components: {
         quillEditor,
         VuePerfectScrollbar
-    }   
+    }
 }
 </script>

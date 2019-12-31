@@ -11,6 +11,9 @@ module.exports = {
       id_sent: {
         type: Sequelize.INTEGER
       },
+      no_surat: {
+        type: Sequelize.STRING
+      },
       from: {
         type: Sequelize.STRING
       },
@@ -33,6 +36,9 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       labels: {
+        type: Sequelize.STRING
+      },
+      status: {
         type: Sequelize.STRING
       },
       created_at: {

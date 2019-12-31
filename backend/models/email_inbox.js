@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     id_sent: DataTypes.INTEGER,
+    no_surat: DataTypes.STRING,
     from: DataTypes.STRING,
     to: DataTypes.STRING,
     subject: DataTypes.STRING,
@@ -14,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     isread: DataTypes.INTEGER,
     isstarred: DataTypes.BOOLEAN,
     labels: DataTypes.STRING,
+    status: DataTypes.STRING,
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE,
   }, {

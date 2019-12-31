@@ -9,8 +9,8 @@
 
 
 <template>
-    <div id="email-app" class="border border-solid border-grey-light rounded relative overflow-hidden">
 
+    <div id="email-app" class="border border-solid border-grey-light rounded relative overflow-hidden">
         <vs-sidebar class="items-no-padding" parent="#email-app" :click-not-close="clickNotClose" :hidden-background="clickNotClose" v-model="isEmailSidebarActive">
             <email-sidebar :emailTags="emailTags" @closeSidebar="toggleEmailSidebar" :mailFilter="mailFilter"></email-sidebar>
         </vs-sidebar>
@@ -77,18 +77,36 @@
             </div>
 
             <!-- EMAILS LIST -->
-
+            <!--
             <VuePerfectScrollbar class="email-content-scroll-area" :settings="settings" ref="mailListPS">
                 <transition-group name="list-enter-up" class="email__mails" tag="ul" appear>
-
                     <li class="cursor-pointer email__mail-item" v-for="(mail, index) in mails" :key="String(mailFilter) + String(mail.id_inbox)" @click.stop="updateOpenMail(mail.id_inbox)" :style="{transitionDelay: (index * 0.1) + 's'}">
                         <mail-item :mail="mail" :isMailOpen="isMailOpen(mail.id_inbox)" :isSelected="isMailSelected(mail.id_inbox)" @addToSelected="addToSelectedMails" @removeSelected="removeSelectedMail"></mail-item>
                     </li>
                 </transition-group>
             </VuePerfectScrollbar>
+            -->
+            <VuePerfectScrollbar class="email-content-scroll-area" :settings="settings" ref="mailListPS">
+                <transition-group name="list-enter-up" class="email__mails" tag="ul" appear v-if="mailFilter === 'inbox'">
+
+                    <li class="cursor-pointer email__mail-item" v-for="(mail, index) in mails" :key="String(mailFilter) + String(mail.id_inbox)" @click.stop="updateOpenMail(mail.id_inbox)" :style="{transitionDelay: (index * 0.1) + 's'}">
+                        <mail-item :mail="mail" :isMailOpen="isMailOpen(mail.id_inbox)" :isSelected="isMailSelected(mail.id_inbox)" @addToSelected="addToSelectedMails" @removeSelected="removeSelectedMail"></mail-item>
+                    </li>
+                </transition-group>
+                
+                <transition-group name="list-enter-up" class="email__mails" tag="ul" appear v-if="mailFilter === 'sent'">
+
+                    <li class="cursor-pointer email__mail-item" v-for="(mail, index) in mails" :key="String(mailFilter) + String(mail.id_sent)" @click.stop="updateOpenMail2(mail.id_sent)" :style="{transitionDelay: (index * 0.1) + 's'}">
+                        <mail-item :mail="mail" :isMailOpen="isMailOpen(mail.id_sent)" :isSelected="isMailSelected(mail.id_sent)" @addToSelected="addToSelectedMails" @removeSelected="removeSelectedMail"></mail-item>
+                    </li>
+                </transition-group>
+            </VuePerfectScrollbar>
+            
         </div>
 
         <!-- EMAIL VIEW SIDEBAR -->
+        <!-- <div v-if="this.$store.state.surat.mail_filter === 'inbox'"> -->
+        
         <email-view
             :emailTags = "emailTags"
             :openMailId = "openMailId"
@@ -100,6 +118,24 @@
             @moveTo = "moveCurrentTo"
             @closeSidebar = "closeMailViewSidebar">
         </email-view>
+        
+        <!-- </div> -->
+        <!-- <div v-if="mailFilter === 'sent'"> -->
+        <!-- <div v-if="this.$store.state.surat.mail_filter === 'sent'"> -->
+        
+        <email-view-sent
+            :emailTags = "emailTags"
+            :openMailId = "openMailId"
+            :isSidebarActive = "isSidebarActive"
+            @markUnread = "updateSingleMarkUnread"
+            @removeMail = "removeOpenMail"
+            @previousMailSent = "previousMailSent"
+            @nextMailSent = "nextMailSent"
+            @moveTo = "moveCurrentTo"
+            @closeSidebar = "closeMailViewSidebar">
+        </email-view-sent> 
+
+        <!-- </div> -->
     </div>
 </template>
 
@@ -107,6 +143,7 @@
 import EmailSidebar from './EmailSidebar.vue'
 import MailItem from './MailItem.vue'
 import EmailView from './EmailView.vue'
+import EmailViewSent from './EmailViewSent.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import axios from 'axios'
 
@@ -174,10 +211,21 @@ export default{
         },
     },
     methods: {
+        /* pilter(){
+            return this.$store.state.surat.mail_filter;
+        }, */
         updateOpenMail(mailId) {
+            // console.log(this.mailFilter)
             this.openMailId = mailId;
             const payload = {mails: [mailId], unread: false};
             this.$store.dispatch('surat/updateMailUnread', payload);
+            this.isSidebarActive = true;
+        },
+        updateOpenMail2(mailId) {
+            // console.log(this.mailFilter)
+            this.openMailId = mailId;
+            // const payload = {mails: [mailId], unread: false};
+            // this.$store.dispatch('surat/updateMailUnread', payload);
             this.isSidebarActive = true;
         },
         addToSelectedMails(mailId) {
@@ -213,13 +261,23 @@ export default{
             this.$store.dispatch('surat/toggleIsMailStarred', payload)
         },
         nextMail() {
-            const currentMailIndex = this.mails.findIndex((mail) => mail.id == this.openMailId)
-            if(this.mails[currentMailIndex + 1]) this.openMailId = this.mails[currentMailIndex + 1].id
+            const currentMailIndex = this.mails.findIndex((mail) => mail.id_inbox == this.openMailId)
+            if(this.mails[currentMailIndex + 1]) this.openMailId = this.mails[currentMailIndex + 1].id_inbox
         },
         previousMail() {
-            const currentMailIndex = this.mails.findIndex((mail) => mail.id == this.openMailId)
-            if(this.mails[currentMailIndex - 1]) this.openMailId = this.mails[currentMailIndex - 1].id
+            const currentMailIndex = this.mails.findIndex((mail) => mail.id_inbox == this.openMailId)
+            if(this.mails[currentMailIndex - 1]) this.openMailId = this.mails[currentMailIndex - 1].id_inbox
         },
+        //ditambah Brian Start
+        nextMailSent() {
+            const currentMailIndex = this.mails.findIndex((mail) => mail.id_sent == this.openMailId)
+            if(this.mails[currentMailIndex + 1]) this.openMailId = this.mails[currentMailIndex + 1].id_sent
+        },
+        previousMailSent() {
+            const currentMailIndex = this.mails.findIndex((mail) => mail.id_sent == this.openMailId)
+            if(this.mails[currentMailIndex - 1]) this.openMailId = this.mails[currentMailIndex - 1].id_sent
+        },
+        //ditambah Brian End
         updateSingleMarkUnread() {
             this.selectedMails = [this.openMailId];
             this.updateMarkUnread();
@@ -258,6 +316,7 @@ export default{
         MailItem,
         EmailSidebar,
         EmailView,
+        EmailViewSent,
         VuePerfectScrollbar
     },
     created() {
